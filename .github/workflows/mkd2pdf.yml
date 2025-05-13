@@ -1,0 +1,45 @@
+name: markdown to PDF
+
+on:
+  workflow_dispatch: # このワークフローを手動で起動できるように設定します。
+
+permissions:
+  contents: read
+
+jobs:
+  markdonw_files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+      - name: Find Markdown files
+        id: find_markdown
+        run: |
+          find . -name "*.md" -print0 | while IFS= read -r -d $'\0' file; do
+            echo "::set-output name=markdown_files::$file"
+          done
+      - name: Convert Markdown to PDF with pandoc
+        run: |
+          markdown_files=$(echo "${{ steps.find_markdown.outputs.markdown_files }}" | tr '\0' '\n')
+          if [ -n "$markdown_files" ]; then
+            while IFS= read -r file; do
+              pdf_file="${file%.md}.pdf"
+              echo "Converting '$file' to '$pdf_file'"
+              pandoc "$file" -o "$pdf_file"
+              if [ $? -eq 0 ]; then
+                echo "Successfully converted '$file' to '$pdf_file'"
+              else
+                echo "Failed to convert '$file'"
+              fi
+            done <<< "$markdown_files"
+          else
+            echo "No Markdown files found."
+          fi
+      - name: Upload PDF artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: pdf-artifacts
+          path: ./*.pdf
