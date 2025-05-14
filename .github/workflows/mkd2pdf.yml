@@ -39,7 +39,7 @@ jobs:
           else
             echo "No Markdown files found."
           fi
-      - neme: find pdf file
+      - name: find pdf file
         run: find . -name "*.md"
       - name: current dir show
         run: ls -l *.pdf
