@@ -22,7 +22,6 @@ jobs:
         run: |
           find . -name "*.md" -print0 | xargs -0 printf "%s\n" > markdown_files.txt
           echo "::set-output name=markdown_file_list::$(cat markdown_files.txt)"
-          done
       - name: Convert Markdown to PDF with pandoc
         run: |
           markdown_files=$(echo "${{ steps.find_markdown.outputs.markdown_file_list }}")
