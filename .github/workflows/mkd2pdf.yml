@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 jobs:
-  markdonw_files:
+  markdown_files:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,12 +22,12 @@ jobs:
         run: |
           find . -name "*.md" -print0 | xargs -0 printf "%s\n" > markdown_files.txt
           echo "::set-output name=markdown_file_list::$(cat markdown_files.txt)"
-      - name: show markdonw_files.txt
+      - name: show markdown_files.txt
         run: cat -A markdown_files.txt
       - name: Convert Markdown to PDF with pandoc
         run: |
           markdown_files=$(echo "${{ steps.find_markdown.outputs.markdown_file_list }}")
-          set | grep markdonw
+          set | grep markdown
           if [ -n "$markdown_files" ]; then
             while IFS= read -r file; do
               pdf_file="${file%.md}.pdf"
