@@ -52,8 +52,8 @@ jobs:
         run: |
           encoded_list="${{ steps.find_markdown.outputs.markdown_file_list_encoded }}"
           decoded_list=$(echo "$encoded_list" | base64 -d)
-          set | grep markdown
-          printf "%s" "${{ steps.find_markdown.outputs.decoded_list }}"
+          set | grep _list
+          printf "%s" "$decoded_list"
           if [ -n "$decoded_list" ]; then
             while IFS= read -r file; do
               pdf_file="${file%.md}.pdf"
