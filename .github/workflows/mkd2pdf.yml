@@ -17,18 +17,44 @@ jobs:
       #   run: sudo apt-get update && sudo apt-get install -y pandoc
       # - name: Install pdfLatex
       #   run: sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+      # - name: Find Markdown files
+      #   id: find_markdown
+      #   run: |
+      #     find . -name "*.md" -print0 | xargs -0 printf "%s\n" > markdown_files.txt
+      #     echo "::set-output name=markdown_file_list::$(cat markdown_files.txt)"
+      # - name: show markdown_files.txt
+      #   run: cat -A markdown_files.txt
+      # - name: Convert Markdown to PDF with pandoc
+      #   run: |
+      #     markdown_files=$(printf "%s" "${{ steps.find_markdown.outputs.markdown_file_list }}")
+      #     set | grep markdown
+      #     if [ -n "$markdown_files" ]; then
+      #       while IFS= read -r file; do
+      #         pdf_file="${file%.md}.pdf"
+      #         echo "Converting '$file' to '$pdf_file'"
+      #         pandoc "$file" -o "$pdf_file"
+      #         if [ $? -eq 0 ]; then
+      #           echo "Successfully converted '$file' to '$pdf_file'"
+      #         else
+      #           echo "Failed to convert '$file'"
+      #         fi
+      #       done <<< "$markdown_files"
+      #     else
+      #       echo "No Markdown files found."
+      #     fi
       - name: Find Markdown files
         id: find_markdown
         run: |
           find . -name "*.md" -print0 | xargs -0 printf "%s\n" > markdown_files.txt
-          echo "::set-output name=markdown_file_list::$(cat markdown_files.txt)"
-      - name: show markdown_files.txt
-        run: cat -A markdown_files.txt
+          base64_encoded=$(base64 markdown_files.txt)
+          echo "::set-output name=markdown_file_list_encoded::$base64_encoded"
       - name: Convert Markdown to PDF with pandoc
         run: |
-          markdown_files=$(printf "%s" "${{ steps.find_markdown.outputs.markdown_file_list }}")
+          encoded_list="${{ steps.find_markdown.outputs.markdown_file_list_encoded }}"
+          decoded_list=$(echo "$encoded_list" | base64 -d)
           set | grep markdown
-          if [ -n "$markdown_files" ]; then
+          printf "%s" "${{ steps.find_markdown.outputs.decoded_list }}"
+          if [ -n "$decoded_list" ]; then
             while IFS= read -r file; do
               pdf_file="${file%.md}.pdf"
               echo "Converting '$file' to '$pdf_file'"
@@ -38,7 +64,7 @@ jobs:
               else
                 echo "Failed to convert '$file'"
               fi
-            done <<< "$markdown_files"
+            done <<< "$decoded_list"
           else
             echo "No Markdown files found."
           fi
