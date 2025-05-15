@@ -20,7 +20,7 @@ jobs:
       - name: Find Markdown files
         id: find_markdown
         run: |
-          find . -name "*.md" -print0 | xargs -0 printf "%s\n" > markdown_files.tx
+          find . -name "*.md" -print0 | xargs -0 printf "%s\n" > markdown_files.txt
           echo "markdown_file_list=$(cat markdown_files.txt)" >> $GITHUB_OUTPUT
       - name: show markdown_files.txt
         run: cat -A markdown_files.txt
