@@ -17,6 +17,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y pandoc
       - name: Install pdfLatex
         run: sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+      - name: Install IPAex font
+        run: sudo apt-get install fonts-ipafont
       - name: Find Markdown files
         id: find_markdown
         run: |
