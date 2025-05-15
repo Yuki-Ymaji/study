@@ -15,8 +15,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Install pandoc
         run: sudo apt-get update && sudo apt-get install -y pandoc
-      - name: Install pdfLatex
-        run: sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+      # - name: Install pdfLatex
+      #   run: sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
       - name: Find Markdown files
         id: find_markdown
         run: |
@@ -27,8 +27,9 @@ jobs:
       - name: Convert Markdown to PDF with pandoc
         run: |
           markdown_files=$(echo "${{ steps.find_markdown.outputs.markdown_file_list }}")
+          set | grep markdonw
           if [ -n "$markdown_files" ]; then
-            while IFS= read file; do
+            while IFS= read -r file; do
               pdf_file="${file%.md}.pdf"
               echo "Converting '$file' to '$pdf_file'"
               pandoc "$file" -o "$pdf_file"
