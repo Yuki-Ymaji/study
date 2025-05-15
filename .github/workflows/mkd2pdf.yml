@@ -26,8 +26,7 @@ jobs:
         run: cat -A markdown_files.txt
       - name: Convert Markdown to PDF with pandoc
         run: |
-          echo "${{ steps.find_markdown.outputs.markdown_file_list }}"
-          markdown_files=$(echo "${{ steps.find_markdown.outputs.markdown_file_list }}")
+          markdown_files=$(cat markdown_files.txt)
           set | grep markdown
           if [ -n "$markdown_files" ]; then
             while IFS= read -r file; do
