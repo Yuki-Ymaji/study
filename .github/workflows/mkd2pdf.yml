@@ -31,7 +31,7 @@ jobs:
             while IFS= read -r file; do
               pdf_file="${file%.md}.pdf"
               echo "Converting '$file' to '$pdf_file'"
-              pandoc "$file" -o "$pdf_file"
+              pandoc "$file" -o "$pdf_file" --pdf-engine=lualatex -V documentclass=ltjsarticle -V luatexjapresetoptions=hiragino-pron
               if [ $? -eq 0 ]; then
                 echo "Successfully converted '$file' to '$pdf_file'"
               else
