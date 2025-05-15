@@ -25,7 +25,7 @@ jobs:
           echo "markdown_file_list_encoded=$base64_encoded" >> $GITHUB_OUTPUT
       - name: Convert Markdown to PDF with pandoc
         run: |
-          encoded_list="${{ markdown_files.steps.find_markdown.output.markdown_file_list_encoded }}"
+          encoded_list="${{ find_markdown.output.markdown_file_list_encoded }}"
           decoded_list=$(echo "$encoded_list" | base64 -d)
           if [ -n "$decoded_list" ]; then
             while IFS= read -r file; do
