@@ -21,12 +21,12 @@ jobs:
         id: find_markdown
         run: |
           find . -name "*.md" -print0 | xargs -0 printf "%s\n" > markdown_files.txt
-          echo "::set-output name=markdown_file_list::$(cat markdown_files.txt)"
+          echo "markdown_file_list=$(cat markdown_files.txt)" >> $GITHUB_ENV
       - name: show markdown_files.txt
         run: cat -A markdown_files.txt
       - name: Convert Markdown to PDF with pandoc
         run: |
-          markdown_files=$(printf "%s" "${{ steps.find_markdown.outputs.markdown_file_list }}")
+          markdown_files: ${{ env.markdown_file_list}}
           set | grep markdown
           if [ -n "$markdown_files" ]; then
             while IFS= read -r file; do
