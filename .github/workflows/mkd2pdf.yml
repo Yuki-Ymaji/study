@@ -22,7 +22,7 @@ jobs:
         run: |
           find . -name "*.md" -print0 | xargs -0 printf "%s\n" > markdown_files.txt
           base64_encoded=$(base64 markdown_files.txt)
-          echo "::set-output name=markdown_file_list_encoded::$base64_encoded"
+          echo "{markdown_file_list_encoded}={$base64_encoded}" >> $GITHUB_OUTPUT
       - name: Convert Markdown to PDF with pandoc
         run: |
           encoded_list="${{ steps.find_markdown.outputs.markdown_file_list_encoded }}"
