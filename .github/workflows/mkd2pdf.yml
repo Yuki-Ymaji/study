@@ -16,9 +16,7 @@ jobs:
       - name: Install pandoc
         run: sudo apt-get update && sudo apt-get install -y pandoc
       - name: Install Latex
-        run: sudo apt install texlive-lang-japanese texlive-luatex texlive-latex-extra texlive-latex-recommended
-      - name: Install latex font
-        run: sudo apt-get install -y texlive-lang-cjk
+        run: sudo apt install texlive-lang-japanese texlive-luatex texlive-latex-recommended
       - name: Find Markdown files
         id: find_markdown
         run: |
